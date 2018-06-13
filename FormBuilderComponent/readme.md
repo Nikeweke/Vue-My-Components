@@ -30,3 +30,8 @@ export default {
 }
 ```
 
+4) Форму собрать надо обратиться к хранилищу
+```js
+this.$store.state.form
+```
+
