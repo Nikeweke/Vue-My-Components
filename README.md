@@ -1,6 +1,7 @@
 # My Vue components
 + **FormBuilder** - just pass there "fields" and it build form 
 + **Calendar** - just calendar, range calendar, multiple and single dates picker
++ **Datatable** - create table with sort, search(filter)
 
-* mixins
-  + **apiMixin** - mixins for making request
+* Mixins
+  + **Api** - mixins for making request
