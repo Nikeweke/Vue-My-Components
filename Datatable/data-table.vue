@@ -15,25 +15,16 @@
     <table class="table table-hover ar-table-tasks">
         <thead>
             <tr>
-               <th v-for="(col, i) of columns" 
-                   :key="i" 
-                   @click="sortData(col)"
-                   :title="col">
-                   
-                     {{ col }} 
-                     
-                     <i v-if="sort.orderIcons[col]" class="fas fa-angle-down"></i>
-                     <i v-if="!sort.orderIcons[col]" class="fas fa-angle-up"></i>
+               <th v-for="(col, i) of columns" :key="i" @click="sortData(col)" style="cursor:pointer">
+                  {{ col }} 
+                  <i v-if="sort.orderIcons[col]">&#8595;</i>
+                  <i v-if="!sort.orderIcons[col]">&#8593;</i>
                 </th>
             </tr>
         </thead>
         <tbody>
             <tr v-for="(item, i) of filteredData" :key="i" @click="showTask(item.id)">
-              <td>{{ item.id }}</td>
-              <td>{{ item.name }}</td>
-              <td>{{ item.surname }}</td>
-              <td>{{ item.age }}</td>
-              <td>{{ item.date }}</td>
+              <td v-for="(field, i) of columns" :key="i">{{ item[field] }}</td>
             </tr>
         </tbody>
     </table>
@@ -83,17 +74,15 @@ export default {
       })
     },
   },
-
   
   // METHODS
   methods: {
-
     /**
     * Сортировка данных
     * @param {String} key поле по которому сортировать данные
     */
     sortData (key) {
-      let sortHandler
+      let sortHandler = ''
       let isDate = (key === 'created_at' || key === 'due_date')
       let isIcon = (key === 'status' || key === 'critical' || key === 'priority')
 
@@ -101,18 +90,13 @@ export default {
       if (isDate) {
         sortHandler =  this.sortDate 
 
-      // если сорт по полю с иконкой  
-      } else if (isIcon) {
-        sortHandler =  this.sortIcon 
-       
       // если сорт по числовому или строчному полю  
       } else {
         sortHandler =  this.sortString
       }
 
-      // здесь описан toggle для sort (change key and toggle 'asc' <-> 'desc')
+      // change desc/asc AND arrow up/down
       this.toggleSort(key)
-      
       this.data.sort(sortHandler)
     },
 
