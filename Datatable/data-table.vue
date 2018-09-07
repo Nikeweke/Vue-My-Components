@@ -1,36 +1,40 @@
 <template>
-<div class="container">
-
-   <h2>Vue data table</h2>
-
-    <div class="input-group mb-2">
-      <div class="input-group-prepend">
-        <div @click="showMe()" class="input-group-text"><i class="fas fa-search"></i></div>
+<div>
+    <div v-if="data.length">
+      <div class="input-group mb-2">
+        <div class="input-group-prepend">
+          <div @click="showMe()" class="input-group-text"><i class="fas fa-search"></i></div>
+        </div>
+        <input v-model="search" type="text" class="form-control" placeholder="Поиск...">
       </div>
-      <input v-model="search" type="text" class="form-control" placeholder="Поиск...">
+
+      <br>
+
+      <code>{{ sort }}</code>
+
+      <br><br>
+
+      <table class="table is-bordered is-stripped" style="width:100%;">
+          <thead>
+              <tr>
+                <th v-for="(col, i) of columns" :key="i" @click="sortData(col)" style="cursor:pointer">
+                    {{ col.title }} 
+                    <i v-if="sort.orderIcons[col.title]">&#8595;</i>
+                    <i v-if="!sort.orderIcons[col.title]">&#8593;</i>
+                  </th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr v-for="(item, i) of filteredData" :key="i" @click="showTask(item.id)">
+                <td v-for="(col, i) of columns" :key="i">{{ item[col.title] }}</td>
+              </tr>
+          </tbody>
+      </table>
+
+      <Pagination />
     </div>
 
-    <code>{{ sort }}</code>
-
-    <table class="table table-hover ar-table-tasks">
-        <thead>
-            <tr>
-               <th v-for="(col, i) of columns" :key="i" @click="sortData(col)" style="cursor:pointer">
-                  {{ col }} 
-                  <i v-if="sort.orderIcons[col]">&#8595;</i>
-                  <i v-if="!sort.orderIcons[col]">&#8593;</i>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="(item, i) of filteredData" :key="i" @click="showTask(item.id)">
-              <td v-for="(field, i) of columns" :key="i">{{ item[field] }}</td>
-            </tr>
-        </tbody>
-    </table>
-
     <EmptyPlaceholder v-if="!data.length" />
-
 </div>
 </template>
 
@@ -38,22 +42,34 @@
 <script>
 import moment from 'moment'
 import EmptyPlaceholder from './empty-placeholder.vue'
-
-const DATE_FORMAT = 'DD-MM-YYYY'
+import Pagination from './pagination.vue'
 
 export default {
   // COMPONENTS
   components: {
-    EmptyPlaceholder
+    EmptyPlaceholder,
+    Pagination
   },
   
   // PROPS
-  props: ['columns', 'data'],
+  props: {
+    columns: {
+      type: Array,
+      default: () => ([])
+    },
+    data: {
+      type: Array,
+      default: () => ([])
+    },
+    dateFormat: {
+      type: String,
+      default: 'DD.MM.YYYY'
+    }
+  },
 
   // DATA
   data: () => ({
     search: '',  
-    DATE_FORMAT,
     sort: {
       key: '',
       order: 'desc',
@@ -68,9 +84,12 @@ export default {
     */
     filteredData () {
       return this.data.filter(item => {
-        this.search = this.search.toLowerCase()
-        return item.id === Number(this.search) ||
-               item.name.toLowerCase().includes(this.search)
+        let search = this.search.toLowerCase()
+        for (let key of Object.keys(item)) {
+          if (String(item[key]).toLowerCase().includes(search)) {
+            return true
+          }
+        }
       })
     },
   },
@@ -79,15 +98,13 @@ export default {
   methods: {
     /**
     * Сортировка данных
-    * @param {String} key поле по которому сортировать данные
+    * @param {Object} col колонка {title, type}
     */
-    sortData (key) {
+    sortData (col) {
       let sortHandler = ''
-      let isDate = (key === 'created_at' || key === 'due_date')
-      let isIcon = (key === 'status' || key === 'critical' || key === 'priority')
 
       // если сорт по полю с датой
-      if (isDate) {
+      if (col.type === 'date') {
         sortHandler =  this.sortDate 
 
       // если сорт по числовому или строчному полю  
@@ -96,7 +113,7 @@ export default {
       }
 
       // change desc/asc AND arrow up/down
-      this.toggleSort(key)
+      this.toggleSort(col.title)
       this.data.sort(sortHandler)
     },
 
@@ -168,9 +185,3 @@ export default {
 </script>
 
 
-<style lang="scss">
-.container {
-  left:25%;
-  position: absolute;
-}
-</style>
