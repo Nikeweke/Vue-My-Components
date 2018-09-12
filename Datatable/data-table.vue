@@ -1,10 +1,7 @@
 <template>
 <div>
     <div v-if="data.length">
-      <div class="input-group mb-2">
-        <div class="input-group-prepend">
-          <div @click="showMe()" class="input-group-text"><i class="fas fa-search"></i></div>
-        </div>
+      <div>
         <input v-model="search" type="text" class="form-control" placeholder="Поиск...">
       </div>
 
@@ -31,7 +28,7 @@
           </tbody>
       </table>
 
-      <Pagination :recordsLength="data.length"
+      <Pagination :recordsLength="data.length" 
                   @range-changed="rangeChangedHandler" />
     </div>
 
@@ -46,13 +43,11 @@ import EmptyPlaceholder from './empty-placeholder.vue'
 import Pagination from './pagination.vue'
 
 export default {
-  // COMPONENTS
   components: {
     EmptyPlaceholder,
     Pagination
   },
   
-  // PROPS
   props: {
     columns: {
       type: Array,
@@ -68,10 +63,13 @@ export default {
     }
   },
 
-  // DATA
   data: () => ({
     filteredData: [],
     search: '',  
+    range: {
+      from:'',
+      to: ''
+    },
     sort: {
       key: '',
       order: 'desc',
@@ -81,6 +79,7 @@ export default {
 
   watch: {
     search () {
+      let {from, to} = this.range
       this.filteredData = this.data.filter(item => {
         let search = this.search.toLowerCase()
         for (let key of Object.keys(item)) {
@@ -88,11 +87,10 @@ export default {
             return true
           }
         }
-      })
+      }).splice(from, to)
     }
   },
 
-  // METHODS
   methods: {
     /**
     * Сортировка данных
@@ -112,7 +110,10 @@ export default {
 
       // change desc/asc AND arrow up/down
       this.toggleSort(col.title)
-      this.filteredData.sort(sortHandler)
+
+      let data = Object.assign([], this.data)
+      let {from, to} = this.range
+      this.filteredData = data.sort(sortHandler).splice(from, to)
     },
 
     /**
@@ -175,15 +176,16 @@ export default {
 
     /**
      * Поделить данные на куски для каждой страницы (pagination)
+     * @param {Object} range {from, to}
      */
     rangeChangedHandler (range) {
+      this.range     = range
       let {from, to} = range
       let data = Object.assign([], this.data)
       this.filteredData = data.splice(from, to)
     }
   }, 
 
-  // LIFECYCLE HOOKS
   created () {
     this.sort.key = this.columns[0] 
     this.filteredData = this.data

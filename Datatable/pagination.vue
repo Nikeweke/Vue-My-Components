@@ -7,11 +7,12 @@
           </select>
         </div>
 
-        <a class="pagination-next">Next page </a>
+        <a @click="nextPage()" class="pagination-next">Next page</a>
 
         <ul class="pagination-list">
           <li v-for="(page, i) of pages" :key="i">
-            <a class="pagination-link" @click="setRange(page)">{{ page }}</a>
+            <a :class="{'is-current': page === currentPage, 'pagination-link': true}"
+               @click="setCurrentPage(page)">{{ page }}</a>
           </li>
         </ul>
 
@@ -88,15 +89,16 @@ export default {
     updatePages () {
       let pagesAmount = this.recordsLength/this.currentSize
       this.pages = this.pagination(1, pagesAmount)
+      this.setCurrentPage(1)
     },
 
     /**
     * Установить текущую страницу и обрезать записи или дополнить
-    *
     * @param {Number} page номер страницы
     */
-    setRange (page) {
-      let sizePerPage = this.currentSize
+    setCurrentPage (page) {
+      this.currentPage = page
+      let sizePerPage  = this.currentSize
       let from = ''
       let to   = ''
 
@@ -115,11 +117,21 @@ export default {
       
       this.$emit('range-changed', {to, from})
     },
+
+    /**
+     * Перейти на след. страницу
+     */
+    nextPage () {
+      if (this.pages.length <= this.currentPage) {
+        return
+      }       
+      this.setCurrentPage(this.currentPage+1)
+    }
   },
 
   // LIFECYCLE HOOKS
   created() {
-   this.setRange(this.currentPage)
+   this.setCurrentPage(this.currentPage)
   }
 };
 </script>
