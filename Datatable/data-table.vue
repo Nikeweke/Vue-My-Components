@@ -31,7 +31,8 @@
           </tbody>
       </table>
 
-      <Pagination />
+      <Pagination :recordsLength="data.length"
+                  @range-changed="rangeChangedHandler" />
     </div>
 
     <EmptyPlaceholder v-if="!data.length" />
@@ -69,6 +70,7 @@ export default {
 
   // DATA
   data: () => ({
+    filteredData: [],
     search: '',  
     sort: {
       key: '',
@@ -77,13 +79,9 @@ export default {
     },
   }),
 
-  // COMPUTED
-  computed: {
-    /**
-    * Поиск по полям
-    */
-    filteredData () {
-      return this.data.filter(item => {
+  watch: {
+    search () {
+      this.filteredData = this.data.filter(item => {
         let search = this.search.toLowerCase()
         for (let key of Object.keys(item)) {
           if (String(item[key]).toLowerCase().includes(search)) {
@@ -91,9 +89,9 @@ export default {
           }
         }
       })
-    },
+    }
   },
-  
+
   // METHODS
   methods: {
     /**
@@ -114,7 +112,7 @@ export default {
 
       // change desc/asc AND arrow up/down
       this.toggleSort(col.title)
-      this.data.sort(sortHandler)
+      this.filteredData.sort(sortHandler)
     },
 
     /**
@@ -174,11 +172,21 @@ export default {
       if (date1 < date2) { return res2  }
       return 0
     },
+
+    /**
+     * Поделить данные на куски для каждой страницы (pagination)
+     */
+    rangeChangedHandler (range) {
+      let {from, to} = range
+      let data = Object.assign([], this.data)
+      this.filteredData = data.splice(from, to)
+    }
   }, 
 
   // LIFECYCLE HOOKS
   created () {
     this.sort.key = this.columns[0] 
+    this.filteredData = this.data
   }
 }
 
