@@ -1,4 +1,4 @@
-import Calendar from './calendar.vue'
+import Calendar from './calendar/index.vue'
 
 export default {
   name: 'calendar-single-date',

@@ -1,6 +1,6 @@
 <template>
-  <div class='calendar'>
-    <div class='header'>
+<div>
+    <div class='header' @click="$emit('view-changed', 'Days')">
       <a class='arrow' @click='movePreviousYear'>&laquo;</a>
       <a class='arrow' @click='movePreviousMonth'>&lsaquo;</a>
       <span class='title' @click='moveThisMonth'>
@@ -11,11 +11,14 @@
     </div>
 
   <table class="calendar__content" cellspacing="0" cellpadding="0">
+    <!-- weeks name -->
     <thead>
         <tr>
-          <th class="weekday" v-for='(weekday, i) in weekdays' :key="'wd-'+i">{{ weekday.label_3 }}</th>
+          <th class="weekday" v-for='(weekday, i) in weekdays' :key="'wd-'+i">{{ weekday.label_3 }} </th>
         </tr>
     </thead>
+
+    <!-- days -->
     <tbody>
         <tr class='week' v-for='(week, i) in weeks' :key="'wk'+i">
             <td v-for='(day, i) in week'
@@ -38,9 +41,7 @@
     </tbody>
 </table>
 
-
-
-  </div>
+</div>
 </template>
 
 <script>
@@ -248,174 +249,4 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css?family=Comfortaa');
-$black_grey:#48505e;
-$yellow: #ffc400;
-
-$sidebar-bckg: $black_grey;
-$sidebar-item-clr: rgba(252, 252, 249, 0.87);
-$sidebar-item-clr-active: #fff;
-$sidebar-yellow: rgba(242, 190, 25, 0.87);
-$border-clr: #424242;
-$sb-dp-white-clr: rgba(252, 252, 249, 0.87);
-$sidebar-width: 300px;
-$sidebar-collapsed-width: 70px;
-$z-index: 100;
-
-.calendar {
-  font-family: 'Comfortaa', cursive;
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-  background-color: $black_grey;
-
-  .header {
-    // width: 100%;
-    display: flex;
-    justify-content: stretch;
-    align-items: center;
-    color: rgba(252, 252, 249, 0.87);
-    padding: 0.5rem 1rem;
-    background-color: $sidebar-bckg;
-  }
-  .header .arrow {
-    cursor: pointer;
-    padding: 0 0.4em 0.2em 0.4em;
-    font-size: 1.6rem;
-    font-weight: 300;
-    -webkit-user-select: none;
-      -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
-    flex-grow: 0;
-  }
-  .header .arrow:hover {
-    color: #dcdcdc;
-  }
-  .header .title {
-    font-weight: 600;
-    cursor: pointer;
-    flex-grow: 1;
-    font-size: .9rem;
-    text-align: center;
-  }
-  .header .title:hover {
-    color: #dcdcdc;
-  }
-
-  .weekdays {
-    display: flex;
-  }
-
-  .calendar__content {
-    width: 100%;
-    table-layout: fixed;
-  }
-
-  .weekday {
-    color: $yellow;
-    font-size:10px;
-    // text-align: center;
-    width: 24px;
-    padding-left:10px;
-  }
-
-  .week {
-    // display: flex;
-  }
-
-
-  .day {
-     width: 32px;
-     height: 30px;
-    padding: 4px 0;
-    box-sizing: border-box;
-    text-align: center;
-    cursor: pointer;
-    position: relative;
-    font-size:12px;
-    color:#fff;
-
-    .day__label-wrapper {
-      height: 30px;
-      width:100px;
-      padding: 3px 0;
-      box-sizing: border-box;
-
-   
-    }
-
-    .day__label-wrapper__label {
-      width: 24px;
-      height: 24px;
-      display: block;
-      margin: 0 auto;
-      line-height: 24px;
-      position: absolute;
-      left: 55%;
-      top:20%;
-      transform: translateX(-50%);
-      border-radius: 50%;
-      text-align: center;
-    }
-
-    &.dragged {
-      color: #fafafa;
-    }
-    &.dragged .day__label-wrapper {
-      width: 100%;
-      background-color: rgba(242, 190, 25, 0.78);
-    }
-    &.dragged.start-date .day__label-wrapper .day__label-wrapper__label, 
-    &.dragged.end-date .day__label-wrapper .day__label-wrapper__label {
-      background-color: $yellow;
-      border-radius: 50%;
-    }
-    &.dragged.start-date .day__label-wrapper {
-      border-top-left-radius: 20px;
-      border-bottom-left-radius: 20px;
-      width:80%;
-      margin-left: 20%;
-    }
-    &.dragged.end-date .day__label-wrapper {
-      border-top-right-radius: 20px;
-      border-bottom-right-radius: 20px;
-      width:85%;
-    }
-    
-  }
-
-  .today {
-    font-weight: 700;
-    color: $yellow;
-  }
-
-  .not-in-month {
-    color: rgba(252, 252, 249, 0.54);
-    // background-color: #fafafa;
-
-  }
-
-  .selected {
-    color: #fafafa;
-    background-color: #5e7fa0;
-  }
-
-  
-
-  .sidebar {
-    margin-left: 20px;
-  }
-  .sidebar h4 {
-    font-size: 1.2rem;
-    font-weight: 500;
-    margin-top: 20px;
-    margin-bottom: 10px;
-  }
-  .sidebar .option {
-    margin-top: 5px;
-  }
-}
-
-</style>
+<style src="./styles.scss" lang="scss" scoped></style>

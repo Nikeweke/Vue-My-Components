@@ -5,30 +5,27 @@
 
     <br>
 
-    <h3>Calendar with Range pick </h3>
+    <!-- <h3>Calendar with Range pick </h3>
     <CalendarRange @drag="setDate"/>
-    <h5>Date range: {{ dates }}  </h5>
+    <h5>Date range: {{ dates }}  </h5> -->
 
     <br> 
 
-    <h3>Calendar with Multiple dates pick </h3>
+    <!-- <h3>Calendar with Multiple dates pick </h3>
     <CalendarMultiple v-model="dateSelection" />
-    <h5>Date selection: {{ dateSelection }}</h5>
+    <h5>Date selection: {{ dateSelection }}</h5> -->
 
     <br>
 
-    <h3>Calendar with Single date pick </h3>
+    <!-- <h3>Calendar with Single date pick </h3>
     <CalendarSingle v-model="dateSelection2" />
-    <h5>Date selection: {{ dateSelection2 }}</h5>
-
-    
-    
+    <h5>Date selection: {{ dateSelection2 }}</h5> -->
 
 </div>
 </template>
 
 <script>
-import Calendar         from './calendar.vue'       // календарь
+import Calendar         from './calendar/index.vue'       // календарь
 import CalendarRange    from './calendar-range.js'  // выбор диапазона (функционал) 
 import CalendarMultiple from './calendar-multiple-dates.js'  // выбор нескольких дат (функционал) 
 import CalendarSingle   from './single.js'          // выбор одной даты  (функционал)
@@ -61,7 +58,8 @@ body {
   font-family:  'Comfortaa', cursive;
 }
 .container {
-  margin-left: 45%;
+  width:800px;
+  margin: 0 auto;
 }
 </style>
 
