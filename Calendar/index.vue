@@ -5,9 +5,9 @@
 
     <br>
 
-    <!-- <h3>Calendar with Range pick </h3>
+    <h3>Calendar with Range pick </h3>
     <CalendarRange @drag="setDate"/>
-    <h5>Date range: {{ dates }}  </h5> -->
+    <h5>Date range: {{ dates }}  </h5>
 
     <br> 
 

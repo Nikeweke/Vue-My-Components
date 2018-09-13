@@ -35,37 +35,6 @@
     
   </table>
 
-  <!-- {{currentMonthName}} -->
-<!--
-  <table class="calendar__content" cellspacing="0" cellpadding="0">
-    <thead>
-        <tr>
-          <th class="weekday" v-for='(weekday, i) in weekdays' :key="'wd-'+i">{{ weekday.label_3 }} </th>
-        </tr>
-    </thead>
-
-    <tbody>
-        <tr class='week' v-for='(week, i) in weeks' :key="'wk'+i">
-            <td v-for='(day, i) in week'
-                class='day'
-                :key="'wk-d'+i"
-                :class="{ today: day.isToday, 
-                        'not-in-month': !day.inMonth,
-                        'start-date': day.startsDrag,
-                        'end-date': day.endsDrag,
-                        'selected': day.isSelected && !day.dragActive,
-                        'dragged': day.isDragged }"
-                @click='$emit("selectDay", day)'
-                @mouseenter='$emit("enterDay", day)'
-                @mouseleave='$emit("leaveDay", day)'>
-                <div class="day__label-wrapper">
-                  <span class="day__label-wrapper__label">{{ day[dayKey] }}</span>
-                </div>
-            </td>
-        </tr>
-    </tbody>
-</table> -->
-
 </div>
 </template>
 
@@ -90,7 +59,10 @@ export default {
 
   computed: {
     monthRows () {
-      return this.chunkArray(this.monthLabels, 4)
+      let monthRows = this.chunkArray(this.monthLabels, 4)
+      for (let i = 0; i < 4; i++) {
+      
+      }
     }
   },
 

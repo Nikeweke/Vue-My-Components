@@ -56,6 +56,19 @@ export default {
       day.endsDrag = dragRange && dateTime === dragRange.endTime;
     },
 
+    configureMonth(month) {
+      const dateTime = day.date.getTime();
+      const valueRange = this.normalizedValue;
+      const dragRange = this.normalizedDragRange;
+    	day.isSelected = valueRange && dateTime >= valueRange.startTime && dateTime <= valueRange.endTime;
+      day.startsSelection = valueRange && dateTime === valueRange.startTime;
+      day.endsSelection = valueRange && dateTime === valueRange.endTime;
+      day.dragActive = dragRange; // Just to let day know drag is happening somewhere
+      day.isDragged = dragRange && dateTime >= dragRange.startTime && dateTime <= dragRange.endTime;
+      day.startsDrag = dragRange && dateTime === dragRange.startTime;
+      day.endsDrag = dragRange && dateTime === dragRange.endTime;
+    },
+
   	selectDay(day) {
       // Start new drag selection if not dragging
       if (!this.dragMode) {
@@ -76,6 +89,10 @@ export default {
       }
     },
 
+    selectMonth () {
+
+    },
+
     /**
      * On hove on day
      */ 
@@ -86,6 +103,10 @@ export default {
         start: this.dragRange.start,
         end: day.date,
       }
+    },
+
+    enterMonth () {
+
     },
 
     // Ranges can privately have end date earlier than start date
@@ -102,7 +123,9 @@ export default {
         end: isNormal ? end : start,
         endTime: isNormal ? endTime : startTime,
       }
-    }
+    },
+
+
   },
 
   created() {

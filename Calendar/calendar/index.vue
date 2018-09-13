@@ -4,7 +4,16 @@
         <!-- тут идет смена видов: дни, месяцы и годы -->
         <component :is="currentView"
                    :views="views"
-                   @view-changed="setCurrentView"/>
+                   @view-changed="setCurrentView"
+
+                   @configureDay="$emit('configureDay', $event)" 
+                   @selectDay="$emit('selectDay', $event)"
+                   @enterDay="$emit('enterDay', $event)"
+
+                   @configureMonth="$emit('configureMonth', $event)" 
+                   @selectMonth="$emit('selectMonth', $event)"
+                   @enterMonth="$emit('enterMonth', $event)"
+                   />
     </transition-fade>  
   </div>
 </template>
@@ -35,7 +44,7 @@ export default {
   methods: {
     setCurrentView (view) {
       this.currentView = view
-    }
+    },
   }
 }
 </script>
