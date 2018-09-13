@@ -1,6 +1,6 @@
 <template>
 <div>
-    <div class='header' @click="$emit('view-changed', 'Days')">
+    <div class='header' @click="$emit('view-changed', views[0])">
       <a class='arrow' @click='movePreviousYear'>&laquo;</a>
       <a class='arrow' @click='movePreviousMonth'>&lsaquo;</a>
       <span class='title' @click='moveThisMonth'>
@@ -64,6 +64,7 @@ export default {
       default: 'label' // hide days that not in month 
       // default: 'day' // show days that not in month 
     },
+    views: Array
   },
 
   data: () => ({

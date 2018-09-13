@@ -3,8 +3,10 @@
     <div class='header'>
       <a class='arrow' @click='movePreviousYear'>&laquo;</a>
       <a class='arrow' @click='movePreviousMonth'>&lsaquo;</a>
-      <span class='title' @click="$emit('view-changed', views[1])">
-        {{ header.label }}
+      <span class='title'>
+        <span @click="$emit('view-changed', views[1])">
+          {{ header.label }}
+        </span>
       </span>
       <a class='arrow' @click='moveNextMonth'>&rsaquo;</a>
       <a class='arrow' @click='moveNextYear'>&raquo;</a>
@@ -45,17 +47,13 @@
 </template>
 
 <script>
-// Calendar data
-const _daysInMonths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-// const _weekdayLabels = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const _weekdayLabels = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-const _monthLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const _today = new Date();
-const _todayComps = {
-  year: _today.getFullYear(),
-  month: _today.getMonth() + 1,
-  day: _today.getDate(),
-};
+import {
+  _daysInMonths,
+  _weekdayLabels,
+  _monthLabels,
+  _today,
+  _todayComps
+} from './calendar-data.js'
 
 export default {
   props: {
