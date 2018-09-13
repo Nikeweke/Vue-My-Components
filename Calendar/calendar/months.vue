@@ -78,12 +78,15 @@ export default {
       this.currentYear++    
     },
 
-     // Returns number of days in the current month
+    /**
+     * Returns number of days in the current month
+     * @param {Number} monthIndex
+     */
     daysInMonth(monthIndex) {
       // Check for February in a leap year
       if (monthIndex === 2 && this.isLeapYear) return 29;
       // ...Just a normal month
-      return _daysInMonths[this.monthIndex];
+      return _daysInMonths[monthIndex];
     },
 
     /**
@@ -104,6 +107,9 @@ export default {
       return result
     },
 
+    /**
+     * Добавить к каждому месяцу доп. информацию
+     */
     getMonthWithState () {
       let monthWithState = []
 
@@ -114,8 +120,6 @@ export default {
           daysInMonth: this.daysInMonth(monthIndex)
         })
       })
-
-      console.log(monthWithState)
 
       return monthWithState
     }
