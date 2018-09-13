@@ -57,16 +57,16 @@ export default {
     },
 
     configureMonth(month) {
-      const dateTime = day.date.getTime();
+      const dateTime = month.date.getTime();
       const valueRange = this.normalizedValue;
       const dragRange = this.normalizedDragRange;
-    	day.isSelected = valueRange && dateTime >= valueRange.startTime && dateTime <= valueRange.endTime;
-      day.startsSelection = valueRange && dateTime === valueRange.startTime;
-      day.endsSelection = valueRange && dateTime === valueRange.endTime;
-      day.dragActive = dragRange; // Just to let day know drag is happening somewhere
-      day.isDragged = dragRange && dateTime >= dragRange.startTime && dateTime <= dragRange.endTime;
-      day.startsDrag = dragRange && dateTime === dragRange.startTime;
-      day.endsDrag = dragRange && dateTime === dragRange.endTime;
+    	month.isSelected = valueRange && dateTime >= valueRange.startTime && dateTime <= valueRange.endTime;
+      month.startsSelection = valueRange && dateTime === valueRange.startTime;
+      month.endsSelection = valueRange && dateTime === valueRange.endTime;
+      month.dragActive = dragRange; // Just to let month know drag is happening somewhere
+      month.isDragged = dragRange && dateTime >= dragRange.startTime && dateTime <= dragRange.endTime;
+      month.startsDrag = dragRange && dateTime === dragRange.startTime;
+      month.endsDrag = dragRange && dateTime === dragRange.endTime;
     },
 
   	selectDay(day) {
@@ -89,8 +89,8 @@ export default {
       }
     },
 
-    selectMonth () {
-
+    selectMonth (month) {
+      console.log(month) 
     },
 
     /**
@@ -132,5 +132,9 @@ export default {
   	this.$on('configureDay', this.configureDay);
     this.$on('selectDay', this.selectDay);
     this.$on('enterDay', this.enterDay);
+
+    this.$on('configureMonth', this.configureMonth);
+    this.$on('selectMonth', this.selectMonth);
+    this.$on('enterDMonth', this.enterDMonth);
   },
 }
