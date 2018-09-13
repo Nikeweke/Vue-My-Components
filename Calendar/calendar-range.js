@@ -56,6 +56,10 @@ export default {
       day.endsDrag = dragRange && dateTime === dragRange.endTime;
     },
 
+    /**
+     * Дополняем месяц дополнительной информацией, которая своественна функционалу "range"
+     * @param {Object} month 
+     */
     configureMonth(month) {
       const dateTime = month.date.getTime();
       const valueRange = this.normalizedValue;
@@ -90,12 +94,26 @@ export default {
     },
 
     selectMonth (month) {
-      console.log(month) 
+       // Start new drag selection if not dragging
+       if (!this.dragMode) {
+        this.dragMode = true
+        this.dragRange = {
+          start: month.date,
+          end: month.date,
+        };
+      // Complete drag selection
+      } else {
+        this.dragMode = false
+        const { start, end } = this.normalizedDragRange;
+        // Clear drag selection
+        // this.dragRange = null;
+        
+        // Signal new value selected on drag complete
+        this.$emit('input', { start, end })
+      }
     },
 
-    /**
-     * On hove on day
-     */ 
+   
     enterDay(day) {
       if (!this.dragMode) return;
       // Update drag selection
@@ -105,8 +123,16 @@ export default {
       }
     },
 
-    enterMonth () {
+    enterMonth (month) {
+      if (!this.dragMode) return;
+      // Update drag selection
 
+      let endDate = new Date(month.date.setDate(month.daysInMonth))
+
+      this.dragRange = {
+        start: this.dragRange.start,
+        end: endDate,
+      }
     },
 
     // Ranges can privately have end date earlier than start date
@@ -135,6 +161,6 @@ export default {
 
     this.$on('configureMonth', this.configureMonth);
     this.$on('selectMonth', this.selectMonth);
-    this.$on('enterDMonth', this.enterDMonth);
+    this.$on('enterMonth', this.enterMonth);
   },
 }

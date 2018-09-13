@@ -6,7 +6,7 @@
     <br>
 
     <h3>Calendar with Range pick </h3>
-    <CalendarRange @drag="setDate"/>
+    <CalendarRange @drag="setDate" @input="inputHandler"/>
     <h5>Date range: {{ dates }}  </h5>
 
     <br> 
@@ -47,6 +47,10 @@ export default {
   methods: {
     setDate (dates) {
       this.dates = dates
+    },
+
+    inputHandler (dates) {
+      console.log(dates)
     }
   }
 }

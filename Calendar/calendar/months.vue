@@ -3,7 +3,7 @@
   <div class='header' >
     <a class='arrow' @click='movePreviousYear'>&lsaquo;</a>
     <span class='title'>
-      <span @click="$emit('view-changed', views[2])">
+      <span @click="$emit('view-changed', views[0])">
         {{ currentYear }}
       </span>
     </span>
@@ -18,7 +18,10 @@
         <td v-for="(month, i2) of row"
             :key="i2" 
             :class="{'month': true, 
-                     'current': currentMonth === month.index}"
+                     'dragged': month.isDragged,
+                     'current': currentMonth === month.index,
+                     'start-date': month.startsDrag,
+                     'end-date': month.endsDrag }"
             @click="$emit('selectMonth', month)"
             @mouseenter="$emit('enterMonth', month)"
             @mouseleave="$emit('leaveMonth', month)">
@@ -114,11 +117,17 @@ export default {
       let monthWithState = []
 
       this.monthLabels.forEach((label, monthIndex) => {
-        monthWithState.push({
+
+        let monthInfo = {
           label,
+          date: new Date(Date.UTC(this.currentYear, monthIndex, 1)),
           index: monthIndex+1,
-          daysInMonth: this.daysInMonth(monthIndex)
-        })
+          daysInMonth: this.daysInMonth(monthIndex),
+          year: this.currentYear
+        }
+
+        monthWithState.push(monthInfo)
+        this.$emit('configureMonth', monthInfo)
       })
 
       return monthWithState
@@ -157,6 +166,18 @@ export default {
       span {
         border-bottom: 3px solid $yellow;
       }
+    }
+
+    .month.dragged {
+      $light-yellow: rgba(242, 190, 25, 0.78);
+      background-color: $light-yellow;
+      border-color: $light-yellow;
+    }
+
+    .month.dragged.start-date,
+    .month.dragged.end-date  {
+      background-color: $yellow;
+      border-color: $yellow;
     }
   }
 </style> 

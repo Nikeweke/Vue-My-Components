@@ -3,8 +3,10 @@
     <div class='header' @click="$emit('view-changed', views[0])">
       <a class='arrow' @click='movePreviousYear'>&laquo;</a>
       <a class='arrow' @click='movePreviousMonth'>&lsaquo;</a>
-      <span class='title' @click='moveThisMonth'>
-        {{ header.label }}
+      <span class='title'>
+        <span @click="$emit('view-changed', views[0])">
+          {{ header.label }}
+        </span>
       </span>
       <a class='arrow' @click='moveNextMonth'>&rsaquo;</a>
       <a class='arrow' @click='moveNextYear'>&raquo;</a>
