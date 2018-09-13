@@ -12,23 +12,23 @@
 
   <table class="calendar__content" cellspacing="0" cellpadding="0">
     <tbody>
-      <tr v-for="(month, i) of monthRows"
+      <tr v-for="(row, i) of monthRows"
           :key="i"
           class="month-row" >
-        <td v-for="(label, i2) of month"
+        <td v-for="(month, i2) of row"
             :key="i2" 
             :class="{'month': true, 
-                     'current': currentMonthName === label,}"
-            @click="$emit('selectMonth', day)"
-            @mouseenter="$emit('enterMonth', day)"
-            @mouseleave="$emit('leaveMonth', day)">
+                     'current': currentMonth === month.index}"
+            @click="$emit('selectMonth', month)"
+            @mouseenter="$emit('enterMonth', month)"
+            @mouseleave="$emit('leaveMonth', month)">
 
              <!-- 'start-date': true,
                      'end-date': true,
                      'selected': true,
                      'dragged': true  -->
 
-             <span>{{ label }}</span>
+             <span>{{ month.label }}</span>
         </td>
       </tr>
     </tbody>
@@ -40,6 +40,7 @@
 
 <script>
 import {
+  _daysInMonths,
   _monthLabelsShort,
   _today,
   _todayComps
@@ -53,17 +54,19 @@ export default {
   data: () => ({
     currentMonth: _todayComps.month,
     currentYear: _todayComps.year,
-    currentMonthName: _todayComps.monthName,
-    monthLabels: _monthLabelsShort
+    monthLabels: _monthLabelsShort,
   }),
 
   computed: {
     monthRows () {
-      let monthRows = this.chunkArray(this.monthLabels, 4)
-      for (let i = 0; i < 4; i++) {
-      
-      }
-    }
+      let monthWithState = this.getMonthWithState()
+      let monthRows      = this.chunkArray(monthWithState, 4)
+      return monthRows
+    },
+
+    isLeapYear() {
+			return (this.currentYear % 4 === 0 && this.currentYear % 100 !== 0) || this.currentYear % 400 === 0;
+    },
   },
 
   methods: {
@@ -73,6 +76,14 @@ export default {
 
     moveNextYear () {
       this.currentYear++    
+    },
+
+     // Returns number of days in the current month
+    daysInMonth(monthIndex) {
+      // Check for February in a leap year
+      if (monthIndex === 2 && this.isLeapYear) return 29;
+      // ...Just a normal month
+      return _daysInMonths[this.monthIndex];
     },
 
     /**
@@ -91,8 +102,28 @@ export default {
         result.push(temparray)
       }
       return result
+    },
+
+    getMonthWithState () {
+      let monthWithState = []
+
+      this.monthLabels.forEach((label, monthIndex) => {
+        monthWithState.push({
+          label,
+          index: monthIndex+1,
+          daysInMonth: this.daysInMonth(monthIndex)
+        })
+      })
+
+      console.log(monthWithState)
+
+      return monthWithState
     }
   },
+
+  // created () {
+  //   this.getMonthWithState()
+  // }
 }
 </script>
 
