@@ -36,7 +36,7 @@
                 @mouseenter='$emit("enterDate", day)'
                 @mouseleave='$emit("leaveDay", day)'>
                 <div class="day__label-wrapper">
-                  <span class="day__label-wrapper__label">{{ day[dayKey] }}</span>
+                  <span class="day__label-wrapper__label">{{ day.day }}</span>
                 </div>
             </td>
         </tr>
@@ -57,12 +57,6 @@ import {
 
 export default {
   props: {
-  	dayKey: { 
-      type: String, 
-      default: 'label' // hide days that not in month 
-      // default: 'day' // show days that not in month 
-    },
-
     views: Array
   },
 
