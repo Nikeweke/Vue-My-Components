@@ -13,11 +13,11 @@
 
     <!-- <h3>Calendar with Multiple dates pick </h3>
     <CalendarMultiple v-model="dateSelection" />
-    <h5>Date selection: {{ dateSelection }}</h5> -->
+    <h5>Date selection: {{ dateSelection }}</h5>
 
     <br>
 
-    <!-- <h3>Calendar with Single date pick </h3>
+    <h3>Calendar with Single date pick </h3>
     <CalendarSingle v-model="dateSelection2" />
     <h5>Date selection: {{ dateSelection2 }}</h5> -->
 

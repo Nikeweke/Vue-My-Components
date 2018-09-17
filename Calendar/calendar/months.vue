@@ -3,7 +3,7 @@
   <div class='header' >
     <a class='arrow' @click='movePreviousYear'>&lsaquo;</a>
     <span class='title'>
-      <span @click="$emit('view-changed', views[0])">
+      <span @click="$emit('view-changed', views[2])">
         {{ currentYear }}
       </span>
     </span>

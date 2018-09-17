@@ -13,6 +13,10 @@
                    @configureMonth="$emit('configureMonth', $event)" 
                    @selectMonth="$emit('selectMonth', $event)"
                    @enterMonth="$emit('enterMonth', $event)"
+
+                   @configureYear="$emit('configureYear', $event)" 
+                   @selectYear="$emit('selectYear', $event)"
+                   @enterYear="$emit('enterYear', $event)"
                    />
     </transition-fade>  
   </div>

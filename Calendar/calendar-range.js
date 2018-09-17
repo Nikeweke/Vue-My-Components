@@ -43,6 +43,10 @@ export default {
   },
 
   methods: {
+    /**
+     * Дополняем да дополнительной информацией, которая своественна функционалу "range"
+     * @param {Object} month 
+     */
   	configureDay(day) {
       const dateTime = day.date.getTime();
       const valueRange = this.normalizedValue;
@@ -56,10 +60,7 @@ export default {
       day.endsDrag = dragRange && dateTime === dragRange.endTime;
     },
 
-    /**
-     * Дополняем месяц дополнительной информацией, которая своественна функционалу "range"
-     * @param {Object} month 
-     */
+   
     configureMonth(month) {
       const dateTime = month.date.getTime();
       const valueRange = this.normalizedValue;
@@ -73,13 +74,26 @@ export default {
       month.endsDrag = dragRange && dateTime === dragRange.endTime;
     },
 
-  	selectDay(day) {
+    configureYear(year) {
+      const dateTime = year.date.getTime();
+      const valueRange = this.normalizedValue;
+      const dragRange = this.normalizedDragRange;
+    	year.isSelected = valueRange && dateTime >= valueRange.startTime && dateTime <= valueRange.endTime;
+      year.startsSelection = valueRange && dateTime === valueRange.startTime;
+      year.endsSelection = valueRange && dateTime === valueRange.endTime;
+      year.dragActive = dragRange; // Just to let year know drag is happening somewhere
+      year.isDragged = dragRange && dateTime >= dragRange.startTime && dateTime <= dragRange.endTime;
+      year.startsDrag = dragRange && dateTime === dragRange.startTime;
+      year.endsDrag = dragRange && dateTime === dragRange.endTime;
+    },
+
+  	selectDay(date) {
       // Start new drag selection if not dragging
       if (!this.dragMode) {
         this.dragMode = true
         this.dragRange = {
-          start: day.date,
-          end: day.date,
+          start: date.date,
+          end: date.date,
         };
       // Complete drag selection
       } else {
@@ -113,6 +127,26 @@ export default {
       }
     },
 
+    selectYear (year) {
+      // Start new drag selection if not dragging
+      if (!this.dragMode) {
+       this.dragMode = true
+       this.dragRange = {
+         start: year.date,
+         end: year.date,
+       };
+     // Complete drag selection
+     } else {
+       this.dragMode = false
+       const { start, end } = this.normalizedDragRange;
+       // Clear drag selection
+       // this.dragRange = null;
+       
+       // Signal new value selected on drag complete
+       this.$emit('input', { start, end })
+     }
+   },
+
    
     enterDay(day) {
       if (!this.dragMode) return;
@@ -126,12 +160,18 @@ export default {
     enterMonth (month) {
       if (!this.dragMode) return;
       // Update drag selection
-
-      let endDate = new Date(month.date.setDate(month.daysInMonth))
-
       this.dragRange = {
         start: this.dragRange.start,
-        end: endDate,
+        end: month.date,
+      }
+    },
+
+    enterYear (year) {
+      if (!this.dragMode) return;
+      // Update drag selection
+      this.dragRange = {
+        start: this.dragRange.start,
+        end: year.date,
       }
     },
 
@@ -162,5 +202,9 @@ export default {
     this.$on('configureMonth', this.configureMonth);
     this.$on('selectMonth', this.selectMonth);
     this.$on('enterMonth', this.enterMonth);
+
+    this.$on('configureYear', this.configureYear);
+    this.$on('selectYear', this.selectYear);
+    this.$on('enterYear', this.enterYear);
   },
 }
