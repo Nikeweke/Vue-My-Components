@@ -32,8 +32,8 @@
                         'end-date': day.endsDrag,
                         'selected': day.isSelected && !day.dragActive,
                         'dragged': day.isDragged }"
-                @click='$emit("selectDay", day)'
-                @mouseenter='$emit("enterDay", day)'
+                @click='$emit("selectDate", day)'
+                @mouseenter='$emit("enterDate", day)'
                 @mouseleave='$emit("leaveDay", day)'>
                 <div class="day__label-wrapper">
                   <span class="day__label-wrapper__label">{{ day[dayKey] }}</span>
@@ -198,7 +198,7 @@ export default {
             isFirstDay: thisMonth && day === 1,
             isLastDay: thisMonth && day === this.daysInMonth,
           };
-          this.$emit('configureDay', dayInfo);
+          this.$emit('configureDate', dayInfo);
           week.push(dayInfo);
           
           // We've hit the last day of the month
@@ -221,12 +221,6 @@ export default {
   },
 
   methods: {
-    // moveThisMonth() {
-    //   this.month = _todayComps.month;
-    //   this.year = _todayComps.year;
-    //   this.$emit('view-changed', 'Month')
-    // },
-    
     moveNextMonth() {
       const { month, year } = this.nextMonthComps;
       this.month = month;

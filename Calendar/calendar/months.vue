@@ -22,8 +22,8 @@
                      'current': currentMonth === month.index,
                      'start-date': month.startsDrag,
                      'end-date': month.endsDrag }"
-            @click="$emit('selectMonth', month)"
-            @mouseenter="$emit('enterMonth', month)"
+            @click="$emit('selectDate', month)"
+            @mouseenter="$emit('enterDate', month)"
             @mouseleave="$emit('leaveMonth', month)">
 
              <!-- 'start-date': true,
@@ -127,7 +127,7 @@ export default {
         }
 
         monthWithState.push(monthInfo)
-        this.$emit('configureMonth', monthInfo)
+        this.$emit('configureDate', monthInfo)
       })
 
       return monthWithState

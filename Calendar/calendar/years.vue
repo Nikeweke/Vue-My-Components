@@ -22,8 +22,8 @@
                      'current': currentYear === year.label,
                      'start-date': year.startsDrag,
                      'end-date': year.endsDrag }"
-            @click="$emit('selectYear', year)"
-            @mouseenter="$emit('enterYear', year)"
+            @click="$emit('selectDate', year)"
+            @mouseenter="$emit('enterDate', year)"
             @mouseleave="$emit('leaveYear', year)">
 
             <span>{{ year.label }}</span>
@@ -68,7 +68,7 @@ export default {
             date: new Date(Date.UTC(n + this.currentYear, 0, 1)),
             index: n,
           }
-          this.$emit('configureYear', yearInfo)
+          this.$emit('configureDate', yearInfo)
 
           return yearInfo
         }

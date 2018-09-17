@@ -6,17 +6,9 @@
                    :views="views"
                    @view-changed="setCurrentView"
 
-                   @configureDay="$emit('configureDay', $event)" 
-                   @selectDay="$emit('selectDay', $event)"
-                   @enterDay="$emit('enterDay', $event)"
-
-                   @configureMonth="$emit('configureMonth', $event)" 
-                   @selectMonth="$emit('selectMonth', $event)"
-                   @enterMonth="$emit('enterMonth', $event)"
-
-                   @configureYear="$emit('configureYear', $event)" 
-                   @selectYear="$emit('selectYear', $event)"
-                   @enterYear="$emit('enterYear', $event)"
+                   @configureDate="$emit('configureDate', $event)" 
+                   @selectDate="$emit('selectDate', $event)"
+                   @enterDate="$emit('enterDate', $event)"
                    />
     </transition-fade>  
   </div>
