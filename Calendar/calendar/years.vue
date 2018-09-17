@@ -19,7 +19,7 @@
             :key="i2" 
             :class="{'year': true, 
                      'dragged': year.isDragged,
-                     'current': currentYear === year.label,
+                     'current': currentYearStatic === year.label,
                      'start-date': year.startsDrag,
                      'end-date': year.endsDrag }"
             @click="$emit('selectDate', year)"
@@ -45,6 +45,7 @@ export default {
   },
 
   data: () => ({
+    currentYearStatic: _todayComps.year,
     currentYear: _todayComps.year,
     yearGap: 11
   }),
