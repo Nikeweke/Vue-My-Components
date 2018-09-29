@@ -1,4 +1,4 @@
-import Calendar from './calendar.vue'
+import Calendar from './calendar/index.vue'
 
 export default {
   name: 'calendar-range',
@@ -43,26 +43,30 @@ export default {
   },
 
   methods: {
-  	configureDay(day) {
-      const dateTime = day.date.getTime();
+    /**
+     * Дополняем дату дополнительной информацией, которая своественна функционалу "range"
+     * @param {Object} date 
+     */
+  	configureDate(date) {
+      const dateTime = date.date.getTime();
       const valueRange = this.normalizedValue;
       const dragRange = this.normalizedDragRange;
-    	day.isSelected = valueRange && dateTime >= valueRange.startTime && dateTime <= valueRange.endTime;
-      day.startsSelection = valueRange && dateTime === valueRange.startTime;
-      day.endsSelection = valueRange && dateTime === valueRange.endTime;
-      day.dragActive = dragRange; // Just to let day know drag is happening somewhere
-      day.isDragged = dragRange && dateTime >= dragRange.startTime && dateTime <= dragRange.endTime;
-      day.startsDrag = dragRange && dateTime === dragRange.startTime;
-      day.endsDrag = dragRange && dateTime === dragRange.endTime;
+    	date.isSelected = valueRange && dateTime >= valueRange.startTime && dateTime <= valueRange.endTime;
+      date.startsSelection = valueRange && dateTime === valueRange.startTime;
+      date.endsSelection = valueRange && dateTime === valueRange.endTime;
+      date.dragActive = dragRange; // Just to let date know drag is happening somewhere
+      date.isDragged = dragRange && dateTime >= dragRange.startTime && dateTime <= dragRange.endTime;
+      date.startsDrag = dragRange && dateTime === dragRange.startTime;
+      date.endsDrag = dragRange && dateTime === dragRange.endTime;
     },
 
-  	selectDay(day) {
+  	selectDate(date) {
       // Start new drag selection if not dragging
       if (!this.dragMode) {
         this.dragMode = true
         this.dragRange = {
-          start: day.date,
-          end: day.date,
+          start: date.date,
+          end: date.date,
         };
       // Complete drag selection
       } else {
@@ -76,15 +80,12 @@ export default {
       }
     },
 
-    /**
-     * On hove on day
-     */ 
-    enterDay(day) {
+    enterDate(date) {
       if (!this.dragMode) return;
       // Update drag selection
       this.dragRange = {
         start: this.dragRange.start,
-        end: day.date,
+        end: date.date,
       }
     },
 
@@ -102,12 +103,16 @@ export default {
         end: isNormal ? end : start,
         endTime: isNormal ? endTime : startTime,
       }
-    }
+    },
   },
 
   created() {
-  	this.$on('configureDay', this.configureDay);
-    this.$on('selectDay', this.selectDay);
-    this.$on('enterDay', this.enterDay);
+    let configureDate = 'configureDate'
+    let selectDate    = 'selectDate'
+    let enterDate     = 'enterDate'
+
+  	this.$on(configureDate, this[configureDate]);
+    this.$on(selectDate, this[selectDate]);
+    this.$on(enterDate, this[enterDate]);
   },
 }
