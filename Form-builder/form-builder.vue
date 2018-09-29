@@ -1,8 +1,10 @@
 <template>
-<span>
+<div>
     <!-- Dynamic Form Builder --> 
-    <div v-for="(item, i) of fields" :key="i"  class="form-group has-label">
-        <label>{{item.label}}</label> &nbsp;
+    <div v-for="(item, i) of fields" :key="i"  class="field">
+      <label class="label">{{ item.label }}</label>
+
+      <div class="control">
 
         <!-- Input - text, password -->
         <input v-if="isInput(item.type)"
@@ -10,20 +12,18 @@
                :placeholder="item.placeholder"
                :type="item.type" class="input" />
         
-
         <!-- Select -->
         <div class="select" v-if="isSelect(item.type)">
-            <select v-model="form[item.model]"
-                    class="select">
-                <option v-for="(opt, i) of item.options"
-                        :key="i"
-                        :value="opt.val">
+            <select v-model.number="form[item.model]" class="select">
+                <option v-for="(opt, i2) of item.options"
+                        :key="i2"
+                        :value="opt.value">
 
                         {{ opt.name }}  
+
                 </option>
             </select>
         </div>
-
 
         <!-- Textarea -->
         <textarea v-if="isTextarea(item.type)" 
@@ -32,96 +32,68 @@
         </textarea>
 
         <!-- Checkboxes --> 
-        <template v-if="isCheckbox(item.type, item.model)">
-            <br /><br />
-            <div class="form-check checkbox-inline" v-for="(opt, i) of item.options" :key="i">
-            <label class="form-check-label">
-                <input class="form-check-input" type="checkbox" :value="opt.val" v-model="form[item.model]">
-                <span class="form-check-sign"></span> {{ opt.name }}
+        <template v-if="isCheckbox(item)">
+          <div v-for="(opt, i3) of item.options" :key="i3">
+            <label>
+                <input v-model="form[item.model]" :value="opt.value" type="checkbox">
+                {{ opt.name }} 
             </label>
-            </div>
+          </div>
         </template>
 
         <!-- RadioButtons -->
         <template v-if="isRadio(item.type)">
-            <br /><br />
-            <div v-for="(opt, i) of item.options" :key="i" class="form-check form-check-radio" >
-            <label  class="form-check-label">
-                <input class="form-check-input" :value="opt.val" type="radio" v-model="form[item.model]"> 
-                <span class="form-check-sign"></span> {{ opt.name }}
+          <div v-for="(opt, i4) of item.options" :key="i4">
+            <label>
+                <input v-model.number="form[item.model]" :value="opt.value" type="radio" > 
+                {{ opt.name }}
             </label>
-            </div>
+          </div>
         </template>
-
-        <!-- Datepicker -->
-        <datetime v-if="isDatepicker(item.type)" 
-                  :auto="dpConfig.auto"
-                  :class="dpConfig.theme"
-                  :format="dpConfig.format"
-                  :phrases="dpConfig.phrases"
-                  :input-class="dpConfig.classInput"
-                  v-model="form[item.model]" />
+       
+      </div>
 
     </div>
 
-    <code>{{ form }}</code>
-</span>
+    {{ form }} 
+</div>
 </template>
 
 <script>
-/*
-*  FormBuilder / backend.js
-*
-*  FormBuilder - служит для создания формы динамически на основе данных полей "fields",
-*  если их изменяет родитель то и поля переписуються в FormBuilder.
-*  Поля("fields") передаються сюда как 'prop'. 
-*  Форма 'form' устанавливаеться в хранилище Vuex, за которой наблюдает watcher и на изменение
-* 'Fields' тоже под наблюдением, когда передаються новые поля надо схватывать новое значение формы из хранилища
-*/
-  
 export default  {
 
   // PROPS
-  props: ['fields'],
+  props: {
+    fields: {
+      type: Array,
+      default: () => ([])
+    }
+  },
 
   // DATA
   data: () => ({
     form: {},
-
-    // datapicker 
-    dpConfig: {
-      phrases: {ok: 'Да', cancel: 'Отмена'},
-      classInput: 'form-control',
-      theme: 'theme-orange',
-      auto: true, // close datepicker on select date        
-      format: { 
-        year: 'numeric',
-        month: 'numeric',  // 'long'
-        day: 'numeric', 
-        // hour: 'numeric', 
-        // minute: '2-digit',
-        // timeZoneName: 'short'
-      }
-    }
   }),
 
   // WATCH
   watch: {
-    form: function () {
-      this.$store.commit('setForm', this.form)
+    fields (value) {
+      this.form = value   
     },
 
-    fields: function () {
-      // console.log(this.form)
-      this.form = {}
+    form: {
+      deep: true,
+      handler () {
+        this.$emit('form-changed', this.form)
+      }
     }
   },
-  
+
   // METHODS
   methods: {
 
     /**
-    * Check if string not equal to 'textarea' or 'select'
+    * Check if control 'text' or 'password'
     *
     * @param  {String} fieldType тип поля
     * @return {Boolean} ответ
@@ -156,12 +128,12 @@ export default  {
     /**
     * Сheck if string equal to 'checkbox'
     *
-    * @param  {Object} field тип поля
+    * @param  {Object} item поле
     * @return {Boolean} ответ
     */
-    isCheckbox (type, model = false) {
+    isCheckbox ({type, model}) {
       if (type === 'checkbox') {
-        model ? this.form[model] = [] : false // обозначаем массив, потому что могут выбрать несколько полей
+        this.form['categories'] = []
         return true 
       } else {
         return false
@@ -172,22 +144,13 @@ export default  {
     /**
     * Сheck if string equal to 'radio'
     *
-    * @param  {Object} field тип поля
+    * @param  {String} fieldType тип поля
     * @return {Boolean} ответ
     */
     isRadio (fieldType) {
       return fieldType === 'radio'
     },
-
-    /**
-    * Сheck if string equal to 'datepicker'
-    *
-    * @param  {Object} field тип поля
-    * @return {Boolean} ответ
-    */
-    isDatepicker (fieldType) {
-      return fieldType === 'datepicker'
-    }
   },
+
 }
 </script>

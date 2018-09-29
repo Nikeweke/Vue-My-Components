@@ -1,116 +1,53 @@
 export default [
     {
-      label: 'Номер',
-      model: 'number',
-      type: 'text',
-      placeholder: ''
-    },
-  
-    {
-      label: 'Дата создания',
-      model: 'created_at',
-      type: 'datepicker',
-      placeholder: ''
-    },
-  
-    {
-      label: 'Дата выполнения',
-      model: 'due_date',
-      type: 'datepicker',
-      placeholder: ''
-    },
-  
-    {
-      label: 'Тип',
-      model: 'type',
-      type: 'select',
-      placeholder: '',
-      options: [
-        {name: 'first', val: '1'},
-        {name: 'second', val: '2'}
-      ]
-    },
-  
-    {
-      label: 'Задача',
+      label: 'Название',
       model: 'title',
       type: 'text',
       placeholder: ''
     },
-  
+
     {
       label: 'Описание',
-      model: 'description',
+      model: 'descr',
       type: 'textarea',
       placeholder: ''
     },
   
     {
-      label: 'Проект',
-      model: 'project',
+      label: 'Категория',
+      model: 'type',
       type: 'select',
       placeholder: '',
       options: [
-        {name: 'first', val: '1'},
-        {name: 'second', val: '2'}
+        {name: 'first', value: '1'},
+        {name: 'second', value: '2'}
       ]
     },
   
     {
-      label: 'Исполнитель',
-      model: 'executor',
-      type: 'select',
+      label: 'Категория',
+      model: 'categories',
+      type: 'checkbox',
       placeholder: '',
       options: [
-        {name: 'first', val: '1'},
-        {name: 'second', val: '2'}
-      ]
-    },
-  
-    {
-      label: 'Критическая',
-      model: 'critical',
-      type: 'select',
-      placeholder: '',
-      options: [
-        {name: 'Да', val: '1'},
-        {name: 'Нет', val: '2'}
+        {name: 'Abstraction', value: '1'},
+        {name: 'People',      value: '2'},
+        {name: 'Writers',     value: '3'},
       ]
     },
   
     {
       label: 'Статус',
       model: 'status',
-      type: 'select',
+      type: 'radio',
       placeholder: '',
       options: [
-        {name: 'first', val: '1'},
-        {name: 'second', val: '2'}
+        {name: 'Done',        value: '1'},
+        {name: 'Undone',      value: '2'},
+        {name: 'In progress', value: '3'},
+        {name: 'Failed',      value: '4'},
       ]
-    },
-  
-    // {
-    //   label: 'Люди',
-    //   model: 'persons',
-    //   type: 'checkbox',
-    //   placeholder: '',
-    //   options: [
-    //     {name: 'Andrey', val: '1'},
-    //     {name: 'Alex',   val: '2'},
-    //     {name: 'Urod',   val: '3'},
-    //   ]
-    // },
-  
-    // {
-    //   label: 'Пол',
-    //   model: 'gender',
-    //   type: 'radio',
-    //   placeholder: '',
-    //   options: [
-    //     {name: 'Male',   val: '1'},
-    //     {name: 'Female', val: '2'},
-    //   ]
-    // }
+    }
   
   ]
   
