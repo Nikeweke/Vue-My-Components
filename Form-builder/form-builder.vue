@@ -54,8 +54,6 @@
       </div>
 
     </div>
-
-    {{ form }} 
 </div>
 </template>
 
@@ -77,10 +75,6 @@ export default  {
 
   // WATCH
   watch: {
-    fields (value) {
-      this.form = value   
-    },
-
     form: {
       deep: true,
       handler () {
@@ -91,6 +85,18 @@ export default  {
 
   // METHODS
   methods: {
+
+    setFormValues () {
+      this.fields.forEach(({type, model}) => {
+        if (type !== 'checkbox') {
+          this.$set(this.form, model, '')
+          
+        // checkbox can has multiple selected options  
+        } else {
+          this.$set(this.form, model, [])
+        }
+      })
+    },
 
     /**
     * Check if control 'text' or 'password'
@@ -132,12 +138,12 @@ export default  {
     * @return {Boolean} ответ
     */
     isCheckbox ({type, model}) {
-      if (type === 'checkbox') {
-        this.form['categories'] = []
-        return true 
-      } else {
-        return false
-      }
+      // if (type === 'checkbox') {
+      //   return true 
+      // } else {
+      //   return false
+      // }
+      return type === 'checkbox'
     },
 
 
@@ -152,5 +158,10 @@ export default  {
     },
   },
 
+  mounted () {
+    if (this.fields.length > 0) {
+      this.setFormValues()
+    }
+  }
 }
 </script>

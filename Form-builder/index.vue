@@ -10,7 +10,7 @@
 
         <br />
         <button class="button is-light" @click="resetForm()">Reset form</button> &nbsp;&nbsp;&nbsp;
-        <button class="button is-light">Set new fields</button>
+        <button class="button is-light" @click="setNewFields()">Set new fields</button>
 
 
         <hr>
@@ -39,11 +39,18 @@ export default {
   }),
 
   methods: {
+    /**
+     * form-changed Handler
+     */
     setForm (form) {
       this.form = form
     },
 
     resetForm () {
+      this.fields = []
+    },
+
+    setNewFields () {
     }
   }
 }
