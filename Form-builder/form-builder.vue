@@ -1,9 +1,8 @@
 <template>
 <div>
-    <!-- Dynamic Form Builder --> 
-    <div v-for="(item, i) of fields" :key="i"  class="field">
-      <label class="label">{{ item.label }}</label>
-
+  <!-- Dynamic Form Builder --> 
+  <div v-for="(item, i) of fields" :key="i"  class="field">
+    <label class="label">{{ item.label }}</label>
       <div class="control">
 
         <!-- Input - text, password -->
@@ -18,9 +17,7 @@
                 <option v-for="(opt, i2) of item.options"
                         :key="i2"
                         :value="opt.value">
-
-                        {{ opt.name }}  
-
+                          {{ opt.name }}  
                 </option>
             </select>
         </div>
@@ -32,7 +29,7 @@
         </textarea>
 
         <!-- Checkboxes --> 
-        <template v-if="isCheckbox(item)">
+        <template v-if="isCheckbox(item.type)">
           <div v-for="(opt, i3) of item.options" :key="i3">
             <label>
                 <input v-model="form[item.model]" :value="opt.value" type="checkbox">
@@ -51,9 +48,8 @@
           </div>
         </template>
        
-      </div>
-
     </div>
+  </div>
 </div>
 </template>
 
@@ -65,7 +61,9 @@ export default  {
     fields: {
       type: Array,
       default: () => ([])
-    }
+    },
+
+    resetFormTrigger: Boolean
   },
 
   // DATA
@@ -80,13 +78,32 @@ export default  {
       handler () {
         this.$emit('form-changed', this.form)
       }
+    },
+
+    fields: {
+      immediate: true,
+      handler () {
+        if (this.fields.length > 0) {
+          this.setFormValues()
+        } 
+      }
+    },
+
+    resetFormTrigger () {
+      if (this.fields.length > 0) {
+        this.setFormValues()
+      }
     }
   },
 
   // METHODS
   methods: {
-
+ 
+    /**
+     * Create dynamic data in form variable
+     */
     setFormValues () {
+      this.form = {}
       this.fields.forEach(({type, model}) => {
         if (type !== 'checkbox') {
           this.$set(this.form, model, '')
@@ -100,7 +117,6 @@ export default  {
 
     /**
     * Check if control 'text' or 'password'
-    *
     * @param  {String} fieldType тип поля
     * @return {Boolean} ответ
     */
@@ -108,10 +124,8 @@ export default  {
       return (fieldType === 'text' || fieldType === 'password') 
     },
 
-
     /**
-    * Check if string equal to 'select'
-    *
+    * Check if control 'select'
     * @param  {String} fieldType тип поля
     * @return {Boolean} ответ
     */
@@ -119,10 +133,8 @@ export default  {
       return fieldType === 'select'
     },
 
-
     /**
-    * Сheck if string equal to 'textarea'
-    *
+    * Сheck if control 'textarea'
     * @param  {String} fieldType тип поля
     * @return {Boolean} ответ
     */
@@ -130,26 +142,17 @@ export default  {
       return fieldType === 'textarea'
     },
 
-
     /**
-    * Сheck if string equal to 'checkbox'
-    *
-    * @param  {Object} item поле
+    * Сheck if control 'checkbox'
+    * @param  {String} fieldType тип поля
     * @return {Boolean} ответ
     */
-    isCheckbox ({type, model}) {
-      // if (type === 'checkbox') {
-      //   return true 
-      // } else {
-      //   return false
-      // }
-      return type === 'checkbox'
+    isCheckbox (fieldType) {
+      return fieldType === 'checkbox'
     },
 
-
     /**
-    * Сheck if string equal to 'radio'
-    *
+    * Сheck if control 'radio'
     * @param  {String} fieldType тип поля
     * @return {Boolean} ответ
     */
@@ -157,11 +160,5 @@ export default  {
       return fieldType === 'radio'
     },
   },
-
-  mounted () {
-    if (this.fields.length > 0) {
-      this.setFormValues()
-    }
-  }
 }
 </script>

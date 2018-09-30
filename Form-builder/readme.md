@@ -1,37 +1,18 @@
-## FormBuilder Component
-Строит форму на основе поданных полей. **(Нужен Vuex)**
+# FormBuilder Component
+Строит форму на основе поданных полей.
 
-### Quick Start
-1) Регистрируем глобально или локально
-2) В родительском компоненте, пример "fields" в fields.js
+### USAGE 
 ```html
- <FormBuilder :fields="fields" />
-```
-3) Хранилище Vuex
-```js
-export default {
-  // STATES  
-  state: {
-    form: {}, // состояние формы для  FormBuilder
-  },
-
-  // MUTATIONS
-  mutations: {
-    // установить значение формы FormBuilder
-    setForm (state, newForm) {
-      state.form = newForm
-    },
-
-    // очистить значение формы FormBuilder 
-    clearForm (state) {
-      state.form = {}
-    },
-  }
-}
+<FormBuilder :fields="fields" 
+             :resetFormTrigger="resetTrigger"
+             @form-changed="setForm"/>
 ```
 
-4) Форму собрать 
-```js
-this.$store.state.form
-```
+### PROPS
 
+* fields `{Array}` - set of fields
+* resetFormTrigger `{Boolean}` - just change it, and it will reset form, 
+
+### EVENTS
+
+* @form-changed `{Object}` - object of form

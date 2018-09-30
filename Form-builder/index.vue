@@ -6,12 +6,16 @@
       <div class="box">
         <h2 class="title is-2">Form builder</h2>
 
-        <FormBuilder :fields="fields" @form-changed="setForm"/>
+        <FormBuilder :fields="fields" 
+                     :resetFormTrigger="resetTrigger"
+                     @form-changed="setForm"/>
 
         <br />
-        <button class="button is-light" @click="resetForm()">Reset form</button> &nbsp;&nbsp;&nbsp;
-        <button class="button is-light" @click="setNewFields()">Set new fields</button>
-
+        <button class="button is-light" @click="resetForm()">Reset form</button> 
+        &nbsp;&nbsp;&nbsp;
+        <button class="button is-light" @click="setFields()">Form 1</button>
+        &nbsp;&nbsp;&nbsp;
+        <button class="button is-light" @click="setFields2()">Form 2</button>
 
         <hr>
         <h4 class="title is-4" style="margin-top:20px;">Result: </h4> 
@@ -27,6 +31,7 @@
 <script>
 import FormBuilder from './form-builder.vue'
 import fields from './fields.js'
+import fields2 from './fields2.js'
 
 export default {
   components: {
@@ -35,7 +40,8 @@ export default {
 
   data: () => ({
     fields,
-    form: {}
+    form: {},
+    resetTrigger: false
   }),
 
   methods: {
@@ -46,11 +52,25 @@ export default {
       this.form = form
     },
 
+    /**
+     * reset form
+     */
     resetForm () {
-      this.fields = []
+      this.resetTrigger = !this.resetTrigger
     },
 
-    setNewFields () {
+    /**
+     * Make form 1
+     */
+    setFields () {
+      this.fields = fields
+    },
+
+    /**
+     * Make form 2
+     */
+    setFields2 () {
+      this.fields = fields2
     }
   }
 }
